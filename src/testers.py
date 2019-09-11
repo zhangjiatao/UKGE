@@ -307,6 +307,7 @@ class Tester(object):
         :param h,r,t: int index
         :return: h_vec, r_vec, t_vec
         """
+        # print(h, r, t)
         h, r, t = int(h), int(r), int(t)  # just in case of float
         hvec = self.con_index2vec(h)
         rvec = self.rel_index2vec(r)
@@ -628,6 +629,8 @@ class Tester(object):
         return test_X, precision, recall, F1, accu, P, R
 
     def get_fixed_hr(self, outputdir=None, n=500):
+
+
         hr_map500 = {}
         dict_keys = []
         for h in self.hr_map.keys():

@@ -39,7 +39,7 @@ def get_model_identifier(whichmodel):
 
 parser = argparse.ArgumentParser()
 # required
-parser.add_argument('--data', type=str, default='cn15k',
+parser.add_argument('--data', type=str, default='fake15k',
                     help="the dir path where you store data (train.tsv, val.tsv, test.tsv). Default: ppi5k")
 # optional
 parser.add_argument("--verbose", help="print detailed info for debugging",

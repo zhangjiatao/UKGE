@@ -167,8 +167,7 @@ class Trainer(object):
                 print("Model saved in file: %s. Data saved in file: %s" % (this_save_path, self.data_save_path))
 
                 # validation error
-                val_loss, val_loss_neg, mean_ndcg, mean_exp_ndcg = self.get_val_loss(epoch,
-                                                                                          sess)  # loss for testing triples and negative samples
+                val_loss, val_loss_neg, mean_ndcg, mean_exp_ndcg = self.get_val_loss(epoch, sess)  # loss for testing triples and negative samples
                 val_losses.append([epoch, val_loss, val_loss_neg, mean_ndcg, mean_exp_ndcg])
 
                 # save and print metrics
@@ -190,15 +189,15 @@ class Trainer(object):
         self.validator.build_by_var(self.this_data.val_triples, self.tf_parts, self.this_data, sess=sess)
 
         if not hasattr(self.validator, 'hr_map'):
-            self.validator.load_hr_map(param.data_dir(), 'test.tsv', ['train.tsv', 'val.tsv',
-                                                                          'test.tsv'])
+            self.validator.load_hr_map(param.data_dir(), 'test.tsv', ['train.tsv', 'val.tsv', 'test.tsv'])
         if not hasattr(self.validator, 'hr_map_sub'):
             hr_map200 = self.validator.get_fixed_hr(n=200)  # use smaller size for faster validation
         else:
             hr_map200 = self.validator.hr_map_sub
 
-        mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(hr_map200)
 
+        mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(hr_map200)
+        # mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(self.validator.hr_map)
         # metrics: mse
         mse = self.validator.get_mse(save_dir=self.save_dir, epoch=epoch, toprint=self.verbose)
         mse_neg = self.validator.get_mse_neg(self.neg_per_positive)
