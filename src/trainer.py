@@ -175,6 +175,14 @@ class Trainer(object):
                 self.save_loss(val_losses, self.val_loss_path,
                                columns=['val_epoch', 'mse', 'mse_neg', 'ndcg(linear)', 'ndcg(exp)'])
 
+                thr_list = [0.7]
+                scores, P, R, F1, Acc = self.validator.classify_triples(0.7, thr_list)
+                print('-------------triple classification---------------')
+                for i in range(len(thr_list)):
+                  print('threhold : %lf | P : %lf | R : %lf | F1 : %lf | Acc : %lf' % (thr_list[i], P[i], R[i], F1[i], Acc[i]))
+                print('-------------------------------------------------')
+
+
         this_save_path = self.tf_parts._saver.save(sess, self.save_path)
         with sess.as_default():
             ht_embeddings = self.tf_parts._ht.eval()
