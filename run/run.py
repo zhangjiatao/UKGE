@@ -44,7 +44,7 @@ parser.add_argument('--data', type=str, default='fake15k',
 # optional
 parser.add_argument("--verbose", help="print detailed info for debugging",
                     action="store_true")
-parser.add_argument('-m', '--model', type=str, default='rect', help="choose model ('logi' or 'rect'). default: rect")
+parser.add_argument('-m', '--model', type=str, default='logi', help="choose model ('logi' or 'rect'). default: rect")
 parser.add_argument('-d', '--dim', type=int, default=128, help="set dimension. default: 128")
 parser.add_argument('--epoch', type=int, default=300, help="set number of epochs. default: 100")
 parser.add_argument('--lr', type=float, default=0.001, help="set learning rate. default: 0.001")
