@@ -503,6 +503,39 @@ class Tester(object):
 
         return ndcg, exp_ndcg
 
+
+    def mr(self, hr_map):
+
+        # debug ndcg
+        res = []  # [(h,r,tw_truth, ndcg)]
+        mr = 0
+        mrr = 0
+        hit_1 = 0
+        hit_10 = 0
+        tot = 0
+        for h in hr_map:
+            for r in hr_map[h]:
+                tw_dict = hr_map[h][r]  # {t:w}
+                tw_truth = [self.IndexScore(t, w) for t, w in tw_dict.items()]
+                tw_truth.sort(reverse=True)  # descending on w
+                ranks = self.get_t_ranks(h, r, [tw.index for tw in tw_truth])
+                
+                for rank in ranks:
+                    mr += rank
+                    mrr += 1 / rank
+                    if rank <= 2:
+                        hit_1 += 1
+                    if rank <= 10:
+                        hit_10 += 1
+                    tot += 1
+
+        mr /= tot
+        mrr /= tot
+        hit_1 /= tot
+        hit_10 /= tot
+        print('MR : %.4lf| MRR : %.4lf| Hit@1 : %.4lf| Hit@10 : %.4lf' % (mr, mrr, hit_1, hit_10))
+
+
     def mean_ndcg(self, hr_map):
         """
         :param hr_map: {h:{r:{t:w}}}
@@ -533,6 +566,7 @@ class Tester(object):
 
                 # debug
                 ranks = self.get_t_ranks(h, r, [tw.index for tw in tw_truth])
+                # print('ranks',ranks)
                 res.append((h,r,tw_truth, ndcg, ranks))
 
         return ndcg_sum / count, exp_ndcg_sum / count

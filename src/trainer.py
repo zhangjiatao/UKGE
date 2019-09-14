@@ -167,17 +167,20 @@ class Trainer(object):
                 print("Model saved in file: %s. Data saved in file: %s" % (this_save_path, self.data_save_path))
 
                 # validation error
-                val_loss, val_loss_neg, mean_ndcg, mean_exp_ndcg = self.get_val_loss(epoch, sess)  # loss for testing triples and negative samples
-                val_losses.append([epoch, val_loss, val_loss_neg, mean_ndcg, mean_exp_ndcg])
+                val_loss, val_loss_neg, mae, mae_neg, mean_ndcg, mean_exp_ndcg = self.get_val_loss(epoch, sess)  # loss for testing triples and negative samples
+                val_losses.append([epoch, val_loss, val_loss_neg, mae, mean_ndcg, mean_exp_ndcg])
 
                 # save and print metrics
                 self.save_loss(train_losses, self.train_loss_path, columns=['epoch', 'training_loss'])
-                self.save_loss(val_losses, self.val_loss_path,
-                               columns=['val_epoch', 'mse', 'mse_neg', 'ndcg(linear)', 'ndcg(exp)'])
+                self.save_loss(val_losses, self.val_loss_path, columns=['val_epoch', 'mse', 'mse_neg', 'mae', 'mae_neg', 'ndcg(linear)', 'ndcg(exp)'])
 
+
+                # print('------------- MR ---------------')
+                # self.validator.mr()
+                # print('--------------------------------')
                 thr_list = [0.7]
                 scores, P, R, F1, Acc = self.validator.classify_triples(0.7, thr_list)
-                print('-------------triple classification---------------')
+                print('------------- triple classification ---------------')
                 for i in range(len(thr_list)):
                   print('threhold : %lf | P : %lf | R : %lf | F1 : %lf | Acc : %lf' % (thr_list[i], P[i], R[i], F1[i], Acc[i]))
                 print('-------------------------------------------------')
@@ -205,11 +208,16 @@ class Trainer(object):
 
 
         mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(hr_map200)
+        print('------------- link prediction ---------------')
+        self.validator.mr(hr_map200)
+        print('-------------------------------------------------')
         # mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(self.validator.hr_map)
         # metrics: mse
         mse = self.validator.get_mse(save_dir=self.save_dir, epoch=epoch, toprint=self.verbose)
+        mae = self.validator.get_mae(save_dir=self.save_dir, epoch=epoch, verbose=self.verbose)
         mse_neg = self.validator.get_mse_neg(self.neg_per_positive)
-        return mse, mse_neg, mean_ndcg, mean_exp_ndcg
+        mae_neg = self.validator.get_mae_neg(self.neg_per_positive)
+        return mse, mse_neg, mae, mae_neg, mean_ndcg, mean_exp_ndcg
 
     def save_loss(self, losses, filename, columns):
         df = pd.DataFrame(losses, columns=columns)
