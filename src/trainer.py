@@ -213,7 +213,7 @@ class Trainer(object):
         print('-------------------------------------------------')
         # mean_ndcg, mean_exp_ndcg = self.validator.mean_ndcg(self.validator.hr_map)
         # metrics: mse
-        mse = self.validator.get_mse(save_dir=self.save_dir, epoch=epoch, toprint=self.verbose)
+        mse = self.validator.get_mse(save_dir=self.save_dir, epoch=epoch, verbose=self.verbose)
         mae = self.validator.get_mae(save_dir=self.save_dir, epoch=epoch, verbose=self.verbose)
         mse_neg = self.validator.get_mse_neg(self.neg_per_positive)
         mae_neg = self.validator.get_mae_neg(self.neg_per_positive)
