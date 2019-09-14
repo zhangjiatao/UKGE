@@ -168,7 +168,7 @@ class Trainer(object):
 
                 # validation error
                 val_loss, val_loss_neg, mae, mae_neg, mean_ndcg, mean_exp_ndcg = self.get_val_loss(epoch, sess)  # loss for testing triples and negative samples
-                val_losses.append([epoch, val_loss, val_loss_neg, mae, mean_ndcg, mean_exp_ndcg])
+                val_losses.append([epoch, val_loss, val_loss_neg, mae, mae_neg, mean_ndcg, mean_exp_ndcg])
 
                 # save and print metrics
                 self.save_loss(train_losses, self.train_loss_path, columns=['epoch', 'training_loss'])
